@@ -2,6 +2,11 @@ from conans import ConanFile, tools, CMake, AutoToolsBuildEnvironment
 from conans.util import files
 import os
 
+try:
+    import conanos.conan.hacks.cmake
+except:
+    if os.environ.get('EMSCRIPTEN_VERSIONS'):
+        raise Exception('Please use pip install conanos to patch conan for emscripten binding !')
 
 class ZlibConan(ConanFile):
     name = "zlib"
@@ -12,13 +17,24 @@ class ZlibConan(ConanFile):
     options = {"shared": [True, False]}
     default_options = "shared=False"
     exports_sources = ["CMakeLists.txt"]
-    url = "http://github.com/lasote/conan-zlib"
+    url = "http://github.com/conanos/zlib"
     license = "Zlib"
     description = "A Massively Spiffy Yet Delicately Unobtrusive Compression Library " \
                   "(Also Free, Not to Mention Unencumbered by Patents)"
 
+    def is_emscripten(self):
+        try:
+            return self.settings.compiler == 'emcc'
+        except:
+		    return False
+
     def configure(self):
         del self.settings.compiler.libcxx
+        if self.is_emscripten():
+            del self.settings.os
+            del self.settings.arch
+            self.options.remove("fPIC")
+            self.options.remove("shared")
 
     def source(self):
         z_name = "zlib-%s.tar.gz" % self.version
@@ -38,9 +54,21 @@ class ZlibConan(ConanFile):
                 tools.replace_in_file(filename,
                                       '#ifdef HAVE_STDARG_H    /* may be set to #if 1 by ./configure */',
                                       '#if defined(HAVE_STDARG_H) && (1-HAVE_STDARG_H-1 != 0)')
+            if self.is_emscripten():
+                tools.replace_in_file('CMakeLists.txt',
+                                      'add_library(zlibstatic STATIC ${ZLIB_SRCS} ${ZLIB_ASMS} ${ZLIB_PUBLIC_HDRS} ${ZLIB_PRIVATE_HDRS})',
+                                      '#iadd_library(zlibstatic STATIC ${ZLIB_SRCS} ${ZLIB_ASMS} ${ZLIB_PUBLIC_HDRS} ${ZLIB_PRIVATE_HDRS})')
+                tools.replace_in_file('CMakeLists.txt',
+                                      'set_target_properties(zlib zlibstatic PROPERTIES OUTPUT_NAME z)',
+                                      'set_target_properties(zlib PROPERTIES OUTPUT_NAME z)')
+                tools.replace_in_file('CMakeLists.txt',
+                                      'install(TARGETS zlib zlibstatic',
+                                      'install(TARGETS zlib ')
+
+                                     
             files.mkdir("_build")
             with tools.chdir("_build"):
-                if not tools.os_info.is_windows:
+                if not tools.os_info.is_windows and not self.is_emscripten():
                     env_build = AutoToolsBuildEnvironment(self)
                     if self.settings.arch in ["x86", "x86_64"] and self.settings.compiler in ["apple-clang", "clang", "gcc"]:
                         env_build.flags.append('-mstackrealign')
@@ -97,6 +125,10 @@ class ZlibConan(ConanFile):
         build_dir = os.path.join(self.ZIP_FOLDER_NAME, "_build")
         lib_path = os.path.join(self.package_folder, "lib")
         suffix = "d" if self.settings.build_type == "Debug" else ""
+        if self.is_emscripten():
+            self.copy(pattern="*.so*", dst="lib", src=build_dir, keep_path=False)
+            return
+
         if self.settings.os == "Windows":
             if self.options.shared:
                 build_dir = os.path.join(self.ZIP_FOLDER_NAME, "_build")
@@ -139,6 +171,9 @@ class ZlibConan(ConanFile):
                 self.copy(pattern="*.a", dst="lib", src=build_dir, keep_path=False)
 
     def package_info(self):
+        if self.is_emscripten():
+            self.cpp_info.libs = ['z']
+            return
         if self.settings.os == "Windows" and not tools.os_info.is_linux:
             self.cpp_info.libs = ['zlib']
         else:
