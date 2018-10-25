@@ -1,13 +1,14 @@
-from conan.packager import ConanMultiPackager
+#from conan.packager import ConanMultiPackager
+from bincrafters import build_template_default
 import platform
 import os
 
 os.environ['CONAN_USERNAME'] = os.environ.get('CONAN_USERNAME','conanos')
 
 if __name__ == "__main__":
-    builder = ConanMultiPackager()
-    builder.add_common_builds(shared_option_name="zlib:shared", pure_c=True)
-
+    #builder = ConanMultiPackager()
+    #builder.add_common_builds(shared_option_name="zlib:shared", pure_c=True)
+    builder = build_template_default.get_builder()
     if os.environ.get('EMSCRIPTEN_VERSIONS'):
         for version in os.environ['EMSCRIPTEN_VERSIONS'].split(','):
             for build_type in os.environ.get('CONAN_BUILD_TYPES','Debug').split(','):
