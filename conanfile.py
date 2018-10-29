@@ -17,7 +17,7 @@ class ZlibConan(ConanFile):
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False]}
-    default_options = "shared=False"
+    default_options = "shared=True"
     exports_sources = ["CMakeLists.txt"]
     url = "http://github.com/conanos/zlib"
     license = "Zlib"
@@ -30,13 +30,17 @@ class ZlibConan(ConanFile):
         except:
             return False
 
+    def config_options(self):
+        if self.is_emscripten():
+            self.options.remove("fPIC")
+            self.options.remove("shared")
+
     def configure(self):
+        
         del self.settings.compiler.libcxx
         if self.is_emscripten():
             del self.settings.os
             del self.settings.arch
-            self.options.remove("fPIC")
-            self.options.remove("shared")
 
     def source(self):
         z_name = "zlib-%s.tar.gz" % self.version
@@ -105,9 +109,14 @@ class ZlibConan(ConanFile):
                             "../win32/Makefile.gcc", 'RC = $(PREFIX)windres', '')
                         self.run("cd .. && make -f win32/Makefile.gcc")
                     else:
+                        _args = ["--prefix=%s/build"%(os.getcwd())]
+                        if not self.options.shared:
+                            _args.extend(['--static'])
                         env_build.configure(
-                            "../", build=False, host=False, target=False)
+                            "../", build=False, host=False, target=False, args=_args)
                         env_build.make()
+                        env_build.install()
+
                 else:
                     cmake = CMake(self)
                     cmake.configure(build_dir=".")
@@ -125,12 +134,13 @@ class ZlibConan(ConanFile):
         # Copy the license files
         self.copy("LICENSE", src=self.ZIP_FOLDER_NAME, dst=".")
 
-        # Copy pc file
-        self.copy("*.pc", dst="", keep_path=False)
-        # Copying zlib.h, zutil.h, zconf.h
-        self.copy("*.h", "include", "%s" %
-                  self.ZIP_FOLDER_NAME, keep_path=False)
-        self.copy("*.h", "include", "%s" % "_build", keep_path=False)
+        if not tools.os_info.is_linux:
+            # Copy pc file
+            self.copy("*.pc", dst="", keep_path=False)
+            # Copying zlib.h, zutil.h, zconf.h
+            self.copy("*.h", "include", "%s" %
+                      self.ZIP_FOLDER_NAME, keep_path=False)
+            self.copy("*.h", "include", "%s" % "_build", keep_path=False)
 
         # Copying static and dynamic libs
         build_dir = os.path.join(self.ZIP_FOLDER_NAME, "_build")
@@ -185,6 +195,10 @@ class ZlibConan(ConanFile):
                         current_lib = os.path.join(lib_path, "libzlibstatic.a")
                         os.rename(current_lib, os.path.join(
                             lib_path, "libzlib.a"))
+        elif tools.os_info.is_linux:
+            if self.options.shared:
+                os.remove('%s/_build/build/lib/libz.a'%(self.ZIP_FOLDER_NAME))
+            self.copy("*", src="%s/_build/build"%(self.ZIP_FOLDER_NAME))
         else:
             if self.options.shared:
                 if self.settings.os == "Macos":

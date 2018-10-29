@@ -1,0 +1,7 @@
+--------------------
+/home/ubuntu/.conan/data/zlib/1.2.11/conanos/dev/build/5246c0bd84cb3855ffc2a458086a0813344953bf/zlib-1.2.11/configure -h
+Sun Oct 28 20:02:24 PDT 2018
+usage:
+  configure [--const] [--zprefix] [--prefix=PREFIX]  [--eprefix=EXPREFIX]
+    [--static] [--64] [--libdir=LIBDIR] [--sharedlibdir=LIBDIR]
+    [--includedir=INCLUDEDIR] [--archs="-arch i386 -arch x86_64"]
