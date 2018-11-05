@@ -1,5 +1,6 @@
 | Version | Channel | Windows | Linux |
 |:-------:|:-------:|:------:|:------:|
+|  * | master | [![Windows Build Status](https://ci.appveyor.com/api/projects/status/github/conanos/zlib?svg=true&branch=master)](https://ci.appveyor.com/project/Mingyiz/zlib?branch=master) |[![Linux Build Status](https://api.travis-ci.org/conanos/zlib.svg?branch=master)](https://travis-ci.org/conanos/zlib?branch=master)|
 |  1.2.11 | testing | [![Windows Build Status](https://ci.appveyor.com/api/projects/status/github/conanos/zlib?svg=true&branch=testing/1.2.11)](https://ci.appveyor.com/project/Mingyiz/zlib?branch=testing/1.2.11) |[![Linux Build Status](https://api.travis-ci.org/conanos/zlib.svg?branch=testing/1.2.11)](https://travis-ci.org/conanos/zlib?branch=testing/1.2.11)|
 |  1.2.11 | stable | [![Windows Build Status](https://ci.appveyor.com/api/projects/status/github/conanos/zlib?svg=true&branch=stable/1.2.11)](https://ci.appveyor.com/project/Mingyiz/zlib?branch=stable/1.2.11) |[![Linux Build Status](https://api.travis-ci.org/conanos/zlib.svg?branch=stable/1.2.11)](https://travis-ci.org/conanos/zlib?branch=stable/1.2.11)|
 
