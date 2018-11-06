@@ -17,7 +17,7 @@ class ZlibConan(ConanFile):
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False]    }
-    default_options = "shared=True"
+    default_options = "shared=False"
     exports_sources = ["CMakeLists.txt"]
     url = "http://github.com/conanos/zlib"
     license = "Zlib"
