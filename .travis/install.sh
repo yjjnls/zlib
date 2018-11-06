@@ -22,4 +22,5 @@ fi
 pip install conan_package_tools
 pip install conan
 pip install bincrafters_package_tools
+pip install conanos
 conan user
