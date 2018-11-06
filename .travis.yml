@@ -8,6 +8,7 @@ env:
      - CONAN_STABLE_BRANCH_PATTERN: "stable/*"
      - CONAN_UPLOAD_ONLY_WHEN_STABLE: 1 # Will only upload when the branch matches "stable/*"
      - CONAN_DOCKER_32_IMAGES: 1
+     - CONANOS_SDK: webstreamer
 
 linux: &linux
    os: linux
