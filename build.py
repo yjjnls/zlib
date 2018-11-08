@@ -9,16 +9,19 @@ from conanos.sdk.profile import filter
 __NAME__ = 'zlib'
 
 if platform.system() == 'Windows':
-    os.environ['CONAN_VISUAL_VERSIONS']=os.environ.get('CONAN_VISUAL_VERSIONS','15')
+    os.environ['CONAN_VISUAL_VERSIONS'] = os.environ.get('CONAN_VISUAL_VERSIONS','15')
 
+os.environ['CONAN_USERNAME'] = os.environ.get('CONAN_USERNAME','conanos')
 
-if __name__ == "__main__":
+if __name__ == "__main__":    
     PATTERN = re.compile(r'conanio/(?P<compiler>gcc|clang)(?P<version>\d+)(-(?P<arch>\w+))?')
     m = PATTERN.match(os.environ.get('CONAN_DOCKER_IMAGE',''))
-    compiler = m.group('compiler')
-    version  = m.group('version')
-    arch     = 'x86_64' if not m.group('arch') else m.group('arch')
-    docker_entry_script ='/bin/bash docker_entry_script.sh %s %s %s'%(compiler,version,arch) if m else ''
+    docker_entry_script = ''
+    if m :
+        compiler = m.group('compiler')
+        version  = m.group('version')
+        arch     = 'x86_64' if not m.group('arch') else m.group('arch')
+        docker_entry_script ='/bin/bash docker_entry_script.sh %s %s %s'%(compiler,version,arch)
     
         
     builder = ConanMultiPackager(docker_entry_script=docker_entry_script)
