@@ -17,7 +17,7 @@ if __name__ == "__main__":
     PATTERN = re.compile(r'conanio/(?P<compiler>gcc|clang)(?P<version>\d+)(-(?P<arch>\w+))?')
     m = PATTERN.match(os.environ.get('CONAN_DOCKER_IMAGE',''))
     docker_entry_script = ''
-    if m :
+    if m and os.path.exists('docker_entry_script.sh'):
         compiler = m.group('compiler')
         version  = m.group('version')
         arch     = 'x86_64' if not m.group('arch') else m.group('arch')
