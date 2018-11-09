@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from bincrafters import build_template_default
+
 import platform
 import os
 import re
