@@ -16,7 +16,7 @@ environment:
     CONAN_STABLE_BRANCH_PATTERN: "stable/*"
     CONAN_UPLOAD_ONLY_WHEN_STABLE: 1 # Will only upload when the branch matches "stable/*"
 
-    CONANOS_SDK: webstreamer
+    CONANOS_SCHEME: webstreamer
 
     matrix:
 
