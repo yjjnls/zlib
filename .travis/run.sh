@@ -9,5 +9,5 @@ if [[ "$(uname -s)" == 'Darwin' ]]; then
     fi
     pyenv activate conan
 fi
-echo "TRAVIS_BRANCH : ${TRAVIS_BRANCH}"
+echo "TRAVIS_BRANCH=${TRAVIS_BRANCH}"
 python build.py
