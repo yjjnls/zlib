@@ -69,5 +69,6 @@ install:
   - ./.travis/install.sh
 
 script:
+  - echo TRAVIS_BRANCH : %TRAVIS_BRANCH%
   - chmod +x .travis/run.sh
   - ./.travis/run.sh
