@@ -4,7 +4,6 @@ branches:
   - /stable\/*/
 env:
    global:
-     - CONAN_REFERENCE: "zlib/1.2.11"
      - CONAN_USERNAME: "conanos"
      - CONAN_LOGIN_USERNAME: "mingyiz"
      - CONAN_CHANNEL: "stable"
