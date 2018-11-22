@@ -136,7 +136,7 @@ class ZlibConan(ConanFile):
 
         if not tools.os_info.is_linux:
             # Copy pc file
-            self.copy("*.pc", dst="", keep_path=False)
+            self.copy("*.pc", dst="lib/pkgconfig", keep_path=False)
             # Copying zlib.h, zutil.h, zconf.h
             self.copy("*.h", "include", "%s" %
                       self.ZIP_FOLDER_NAME, keep_path=False)
