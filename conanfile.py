@@ -1,6 +1,7 @@
 from conans import ConanFile, tools, CMake, AutoToolsBuildEnvironment
 from conans.util import files
 import os
+import shutil
 
 try:
     import conanos.conan.hacks.cmake
@@ -168,6 +169,7 @@ class ZlibConan(ConanFile):
                               src=self.ZIP_FOLDER_NAME)
                 if self.settings.compiler == "Visual Studio":
                     current_lib = os.path.join(lib_path, "zlib%s.lib" % suffix)
+                    shutil.copy2(current_lib, os.path.join(lib_path, "z.lib"))
                     os.rename(current_lib, os.path.join(lib_path, "zlib.lib"))
             else:
                 build_dir = os.path.join(self.ZIP_FOLDER_NAME, "_build/lib")
@@ -189,6 +191,7 @@ class ZlibConan(ConanFile):
                 if self.settings.compiler == "Visual Studio":
                     current_lib = os.path.join(
                         lib_path, "zlibstatic%s.lib" % suffix)
+                    shutil.copy2(current_lib, os.path.join(lib_path, "z.lib"))
                     os.rename(current_lib, os.path.join(lib_path, "zlib.lib"))
                 elif self.settings.compiler == "gcc":
                     if not tools.os_info.is_linux:
