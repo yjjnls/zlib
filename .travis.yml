@@ -26,9 +26,7 @@ osx: &osx
 matrix:
    include:
       - <<: *linux
-        env: CONAN_GCC_VERSIONS=5 CONAN_ARCHS=x86_64 CONAN_DOCKER_IMAGE=conanio/gcc5
-      - <<: *linux
-        env: CONAN_GCC_VERSIONS=7 CONAN_ARCHS=x86_64 CONAN_DOCKER_IMAGE=conanio/gcc7
+        env: EMSCRIPTEN_VERSIONS=1.38 CONAN_ARCHS=x86_64 CONAN_DOCKER_IMAGE=yjjnls/emcc-docker
 
 
 install:
