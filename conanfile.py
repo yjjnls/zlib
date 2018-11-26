@@ -150,6 +150,9 @@ class ZlibConan(ConanFile):
         if self.is_emscripten():
             self.copy(pattern="*.so*", dst="lib",
                       src=build_dir, keep_path=False)
+            # Copying zlib.h, zutil.h, zconf.h
+            self.copy("*.h", dst="include", src="%s" %
+                      self.ZIP_FOLDER_NAME, keep_path=False)
             return
 
         if self.settings.os == "Windows":
