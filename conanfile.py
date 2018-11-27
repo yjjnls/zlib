@@ -4,6 +4,7 @@ import os
 import shutil
 
 try:
+    print("~~~~~conanos.conan.hacks.cmake~~~~~~")
     import conanos.conan.hacks.cmake
 except:
     if os.environ.get('EMSCRIPTEN_VERSIONS'):
@@ -37,7 +38,6 @@ class ZlibConan(ConanFile):
             self.options.remove("shared")
 
     def configure(self):
-        
         del self.settings.compiler.libcxx
         if self.is_emscripten():
             del self.settings.os

@@ -2,6 +2,7 @@ branches:
   only:
   - /testing\/*/
   - /stable\/*/
+  - /emcc\/*/
 env:
    global:
      - CONAN_USERNAME: "conanos"

@@ -19,4 +19,8 @@ if [[ "$(uname -s)" == 'Darwin' ]]; then
     pyenv activate conan
 fi
 
-cd ~/emsdk && source emsdk_env.sh && cd ~
+pip install conan_package_tools
+pip install conan
+# pip install conanos  --upgrade
+git clone https://github.com/yjjnls/conanos.py.git && cd conanos.py && python setup.py install
+conan user
