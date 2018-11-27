@@ -5,7 +5,7 @@ import os
 
 if __name__ == "__main__":    
     # Main('zlib',pure_c=True)
-    builder = ConanMultiPackager(docker_entry_script='source ~/emsdk/emsdk_env.sh')
+    builder = ConanMultiPackager(docker_entry_script="/bin/bash -c 'source ~/emsdk/emsdk_env.sh'")
     builder.add_common_builds(shared_option_name="zlib:shared", pure_c=True)
 
     if os.environ.get('EMSCRIPTEN_VERSIONS'):
